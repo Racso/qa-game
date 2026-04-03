@@ -1,0 +1,170 @@
+<div class="min-h-screen bg-pitch dot-grid flex flex-col">
+
+  <!-- Top bar -->
+  <header class="sticky top-0 z-10 bg-pitch/90 backdrop-blur border-b border-rim px-6 py-4 flex items-center justify-between anim-fade-in">
+    <button (click)="goBack()" class="flex items-center gap-2 text-ink-dim hover:text-ink transition-colors text-sm font-mono">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+      </svg>
+      Back
+    </button>
+
+    <h1 class="font-display text-xl text-ink">New Activity</h1>
+
+    <button
+      (click)="loadDemo()"
+      class="text-xs font-mono tracking-wide text-amber hover:text-amber/80 transition-colors border border-amber/30 hover:border-amber/60 rounded-lg px-3 py-1.5"
+    >
+      Load demo ↓
+    </button>
+  </header>
+
+  <div class="flex-1 max-w-2xl w-full mx-auto px-6 py-8 space-y-8">
+
+    <!-- Activity title -->
+    <div class="anim-fade-up" style="animation-delay:60ms">
+      <label class="block text-xs font-mono tracking-widest uppercase text-ink-ghost mb-2">Activity Title</label>
+      <input
+        type="text"
+        [ngModel]="title()"
+        (ngModelChange)="title.set($event)"
+        placeholder="e.g. General Knowledge"
+        class="w-full bg-void border border-rim hover:border-rim-2 focus:border-sky focus:outline-none rounded-xl px-4 py-3 text-ink text-lg font-display placeholder:text-ink-ghost transition-colors"
+      />
+    </div>
+
+    <!-- Questions -->
+    @for (q of questions(); track $index) {
+      <div
+        class="bg-void border border-rim rounded-2xl overflow-hidden anim-slide-up"
+        [style.animation-delay]="(80 + $index * 60) + 'ms'"
+      >
+        <!-- Question header -->
+        <div class="flex items-center justify-between px-5 py-4 border-b border-rim bg-deep/40">
+          <span class="font-mono text-xs tracking-widest uppercase text-ink-ghost">Question {{ $index + 1 }}</span>
+          @if (questions().length > 1) {
+            <button
+              (click)="removeQuestion($index)"
+              class="w-7 h-7 rounded-lg flex items-center justify-center text-ink-ghost hover:text-coral hover:bg-coral/10 transition-colors"
+            >
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+              </svg>
+            </button>
+          }
+        </div>
+
+        <div class="p-5 space-y-4">
+          <!-- Question text -->
+          <div>
+            <label class="block text-xs font-mono text-ink-ghost mb-1.5">Question</label>
+            <textarea
+              rows="2"
+              [ngModel]="q.text"
+              (ngModelChange)="updateQuestion($index, 'text', $event)"
+              placeholder="What is…?"
+              class="w-full bg-deep border border-rim hover:border-rim-2 focus:border-sky focus:outline-none rounded-xl px-4 py-3 text-ink placeholder:text-ink-ghost resize-none transition-colors font-sans text-sm"
+            ></textarea>
+          </div>
+
+          <!-- Options grid -->
+          <div>
+            <label class="block text-xs font-mono text-ink-ghost mb-1.5">Answer Options</label>
+            <div class="grid grid-cols-2 gap-2">
+              @for (label of optionLabels; track label; let optIdx = $index) {
+                <div
+                  class="flex items-center gap-2 bg-deep border rounded-xl px-3 py-2.5 transition-colors"
+                  [class.border-rim]="q.correctIndex !== optIdx"
+                  [class.border-lime]="q.correctIndex === optIdx"
+                  [class.bg-lime/5]="q.correctIndex === optIdx"
+                >
+                  <span
+                    class="shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-xs font-mono font-bold transition-colors"
+                    [class.bg-rim-2]="q.correctIndex !== optIdx"
+                    [class.text-ink-ghost]="q.correctIndex !== optIdx"
+                    [class.bg-lime/20]="q.correctIndex === optIdx"
+                    [class.text-lime]="q.correctIndex === optIdx"
+                  >{{ label }}</span>
+                  <input
+                    type="text"
+                    [ngModel]="optIdx === 0 ? q.optA : optIdx === 1 ? q.optB : optIdx === 2 ? q.optC : q.optD"
+                    (ngModelChange)="updateQuestion($index, optIdx === 0 ? 'optA' : optIdx === 1 ? 'optB' : optIdx === 2 ? 'optC' : 'optD', $event)"
+                    [placeholder]="'Option ' + label"
+                    class="flex-1 bg-transparent focus:outline-none text-ink placeholder:text-ink-ghost text-sm"
+                  />
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Correct answer + time limit -->
+          <div class="flex items-center gap-6 flex-wrap">
+            <div>
+              <label class="block text-xs font-mono text-ink-ghost mb-2">Correct Answer</label>
+              <div class="flex gap-2">
+                @for (label of optionLabels; track label; let optIdx = $index) {
+                  <button
+                    (click)="setCorrect($index, $any(optIdx))"
+                    class="w-9 h-9 rounded-lg font-mono text-sm font-bold border transition-all duration-150"
+                    [class.border-lime]="q.correctIndex === optIdx"
+                    [class.bg-lime]="q.correctIndex === optIdx"
+                    [class.text-pitch]="q.correctIndex === optIdx"
+                    [class.border-rim]="q.correctIndex !== optIdx"
+                    [class.text-ink-ghost]="q.correctIndex !== optIdx"
+                    [class.hover:border-rim-2]="q.correctIndex !== optIdx"
+                  >{{ label }}</button>
+                }
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-mono text-ink-ghost mb-2">Time Limit</label>
+              <div class="flex gap-2">
+                @for (t of timeLimits; track t) {
+                  <button
+                    (click)="setTimeLimit($index, t)"
+                    class="px-3 h-9 rounded-lg font-mono text-xs border transition-all duration-150"
+                    [class.border-sky]="q.timeLimitSeconds === t"
+                    [class.bg-sky/10]="q.timeLimitSeconds === t"
+                    [class.text-sky]="q.timeLimitSeconds === t"
+                    [class.border-rim]="q.timeLimitSeconds !== t"
+                    [class.text-ink-ghost]="q.timeLimitSeconds !== t"
+                  >{{ t }}s</button>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Add question -->
+    <button
+      (click)="addQuestion()"
+      class="w-full py-4 border border-dashed border-rim-2 rounded-2xl text-ink-dim hover:text-ink hover:border-rim text-sm font-mono tracking-wide transition-colors flex items-center justify-center gap-2 anim-fade-up"
+      [style.animation-delay]="(questions().length * 60 + 100) + 'ms'"
+    >
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+      </svg>
+      Add Question
+    </button>
+
+    <!-- Start button -->
+    <div class="flex justify-end pt-2 pb-8 anim-fade-up" style="animation-delay:200ms">
+      <button
+        (click)="startHosting()"
+        [disabled]="!isValid()"
+        class="flex items-center gap-3 px-6 py-3.5 rounded-xl font-mono text-sm font-bold tracking-wide transition-all duration-200
+               bg-lime text-pitch hover:bg-lime-dim hover:shadow-[0_0_24px_rgba(190,242,100,0.3)]
+               disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-lime disabled:hover:shadow-none"
+      >
+        Start Hosting
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+        </svg>
+      </button>
+    </div>
+
+  </div>
+</div>

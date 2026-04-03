@@ -1,0 +1,117 @@
+<div class="min-h-screen bg-pitch dot-grid flex flex-col">
+
+  @if (question(); as q) {
+
+    <!-- Header: progress + timer -->
+    <header class="px-6 pt-6 pb-4 flex items-center gap-4 anim-fade-in">
+
+      <!-- Progress bar -->
+      <div class="flex-1">
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="font-mono text-xs text-ink-ghost tracking-widest uppercase">Question</span>
+          <span class="font-mono text-xs text-ink-ghost">{{ questionNumber() }} / {{ totalQuestions() }}</span>
+        </div>
+        <div class="h-1.5 bg-void rounded-full overflow-hidden">
+          <div
+            class="h-full bg-lime/60 rounded-full"
+            [style.width.%]="(questionNumber() / totalQuestions()) * 100"
+          ></div>
+        </div>
+      </div>
+
+      <!-- Circular timer -->
+      <div class="relative flex-shrink-0">
+        <svg class="w-14 h-14 -rotate-90" viewBox="0 0 48 48">
+          <circle cx="24" cy="24" r="20" fill="none" stroke="#1a2d46" stroke-width="4"/>
+          <circle
+            cx="24" cy="24" r="20"
+            fill="none"
+            stroke-width="4"
+            stroke-linecap="round"
+            [attr.stroke]="isTimerUrgent() ? '#f87171' : '#bef264'"
+            [attr.stroke-dasharray]="125.6"
+            [attr.stroke-dashoffset]="125.6 * (1 - timerProgress() / 100)"
+            style="transition: stroke-dashoffset 1s linear, stroke 0.3s ease"
+          />
+        </svg>
+        <span
+          class="absolute inset-0 flex items-center justify-center font-mono text-sm font-bold"
+          [class.text-coral]="isTimerUrgent()"
+          [class.anim-timer-urgent]="isTimerUrgent()"
+          [class.text-ink]="!isTimerUrgent()"
+        >{{ timeLeft() }}</span>
+      </div>
+
+    </header>
+
+    <!-- Question text -->
+    <div class="flex-1 flex flex-col px-6 pb-6 gap-5">
+      <div
+        class="flex-1 flex items-center justify-center rounded-2xl bg-void border border-rim px-6 py-8 anim-fade-up"
+        style="animation-delay:60ms; min-height:130px"
+      >
+        <p class="font-display text-2xl md:text-3xl text-ink text-center leading-snug max-w-xl">
+          {{ q.text }}
+        </p>
+      </div>
+
+      <!-- Answer options -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 anim-fade-up" style="animation-delay:120ms">
+        @for (option of q.options; track $index) {
+          <button
+            (click)="selectOption($index)"
+            class="opt-card relative flex items-center gap-4 rounded-2xl border-2 px-5 py-4 text-left"
+            [class]="getCardClass($index)"
+            [attr.data-opt]="$index"
+            [disabled]="answerState() !== 'idle'"
+          >
+            <span class="opt-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center font-mono font-bold text-white/90 text-sm">
+              {{ optionLabels[$index] }}
+            </span>
+
+            <span class="font-display text-lg leading-tight flex-1">{{ option }}</span>
+
+            @if (answerState() === 'answered' && $index === question()?.correctIndex) {
+              <span class="shrink-0 w-7 h-7 rounded-full bg-lime/20 border border-lime flex items-center justify-center anim-scale-pop">
+                <svg class="w-4 h-4 text-lime" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+              </span>
+            }
+
+            @if (answerState() === 'answered' && $index === selectedOption() && $index !== question()?.correctIndex) {
+              <span class="shrink-0 w-7 h-7 rounded-full bg-coral/20 border border-coral flex items-center justify-center anim-scale-pop">
+                <svg class="w-4 h-4 text-coral" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </span>
+            }
+          </button>
+        }
+      </div>
+
+      <!-- Feedback banner -->
+      @if (answerState() === 'answered') {
+        <div
+          class="rounded-xl py-3 px-5 flex items-center gap-3 font-mono text-sm font-bold border anim-slide-up"
+          [class.bg-lime]="isCorrect()"
+          [class.border-lime]="isCorrect()"
+          [class.text-pitch]="isCorrect()"
+          [class.bg-coral]="!isCorrect()"
+          [class.border-coral]="!isCorrect()"
+          [class.text-white]="!isCorrect()"
+        >
+          <span class="text-lg">{{ isCorrect() ? '✓' : '✗' }}</span>
+          <span>{{ isCorrect() ? 'Correct! Calculating score…' : 'Not quite — showing results…' }}</span>
+        </div>
+      }
+
+    </div>
+
+  } @else {
+    <div class="flex-1 flex items-center justify-center">
+      <p class="text-ink-ghost font-mono text-sm">No active question.</p>
+    </div>
+  }
+
+</div>

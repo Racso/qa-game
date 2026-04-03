@@ -1,0 +1,107 @@
+<div class="min-h-screen bg-pitch dot-grid flex flex-col">
+
+  <!-- Header -->
+  <header class="px-8 pt-10 pb-6 anim-fade-up" style="animation-delay:0ms">
+    <div class="flex items-baseline gap-3">
+      <span class="font-mono text-xs tracking-[0.25em] uppercase text-ink-ghost">v0.1 demo</span>
+    </div>
+    <h1 class="font-display text-6xl md:text-8xl text-ink mt-2 leading-none tracking-tight">
+      Klasa
+    </h1>
+    <p class="text-ink-dim text-lg mt-2 font-sans">Interactive learning, together.</p>
+  </header>
+
+  <!-- Main cards -->
+  <main class="flex-1 flex flex-col md:flex-row gap-4 px-8 pb-10 pt-2">
+
+    <!-- Host card -->
+    <button
+      (click)="hostGame()"
+      class="group flex-1 relative rounded-2xl border border-rim bg-void overflow-hidden text-left
+             transition-all duration-300 ease-out
+             hover:border-amber hover:shadow-[0_0_40px_rgba(251,191,36,0.12)] hover:-translate-y-1
+             anim-fade-up"
+      style="animation-delay:80ms"
+    >
+      <!-- Gradient wash -->
+      <div class="absolute inset-0 bg-gradient-to-br from-amber/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+      <div class="relative z-10 p-8 md:p-10 h-full flex flex-col">
+        <!-- Icon -->
+        <div class="w-14 h-14 rounded-xl bg-amber/10 border border-amber/20 flex items-center justify-center mb-8 transition-transform duration-300 group-hover:scale-110">
+          <svg class="w-7 h-7 text-amber" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" />
+          </svg>
+        </div>
+
+        <div class="flex-1">
+          <div class="text-amber text-xs font-mono tracking-widest uppercase mb-2">Teacher</div>
+          <h2 class="text-ink text-3xl md:text-4xl font-display leading-tight mb-3">
+            Host a Game
+          </h2>
+          <p class="text-ink-dim text-base leading-relaxed">
+            Create an activity, generate a join code, and run an interactive quiz for your class.
+          </p>
+        </div>
+
+        <div class="mt-8 flex items-center gap-2 text-amber text-sm font-mono transition-transform duration-300 group-hover:translate-x-1">
+          <span>Create activity</span>
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+          </svg>
+        </div>
+      </div>
+    </button>
+
+    <!-- Join card -->
+    <button
+      (click)="joinGame()"
+      class="group flex-1 relative rounded-2xl border border-rim bg-void overflow-hidden text-left
+             transition-all duration-300 ease-out
+             hover:border-lime hover:shadow-[0_0_40px_rgba(190,242,100,0.1)] hover:-translate-y-1
+             anim-fade-up"
+      style="animation-delay:160ms"
+    >
+      <!-- Gradient wash -->
+      <div class="absolute inset-0 bg-gradient-to-br from-lime/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+      <div class="relative z-10 p-8 md:p-10 h-full flex flex-col">
+        <!-- Icon -->
+        <div class="w-14 h-14 rounded-xl bg-lime/10 border border-lime/20 flex items-center justify-center mb-8 transition-transform duration-300 group-hover:scale-110">
+          <svg class="w-7 h-7 text-lime" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+          </svg>
+        </div>
+
+        <div class="flex-1">
+          <div class="text-lime text-xs font-mono tracking-widest uppercase mb-2">Student</div>
+          <h2 class="text-ink text-3xl md:text-4xl font-display leading-tight mb-3">
+            Join a Game
+          </h2>
+          <p class="text-ink-dim text-base leading-relaxed">
+            Enter your teacher's game code and jump in. No account needed — just your name.
+          </p>
+        </div>
+
+        <div class="mt-8 flex items-center gap-2 text-lime text-sm font-mono transition-transform duration-300 group-hover:translate-x-1">
+          <span>Enter game</span>
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+          </svg>
+        </div>
+      </div>
+    </button>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="px-8 pb-6 flex justify-between items-center anim-fade-in" style="animation-delay:300ms">
+    <span class="font-mono text-xs text-ink-ghost">klasa · classroom activities</span>
+    <div class="flex gap-1">
+      <div class="w-1.5 h-1.5 rounded-full bg-lime/60"></div>
+      <div class="w-1.5 h-1.5 rounded-full bg-rim-2"></div>
+      <div class="w-1.5 h-1.5 rounded-full bg-rim-2"></div>
+    </div>
+  </footer>
+
+</div>

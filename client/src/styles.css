@@ -1,3 +1,150 @@
 @import "tailwindcss";
 
-/* You can add global styles to this file, and also import other style files */
+@theme {
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-sans: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+  --color-ink: #edf0f7;
+  --color-ink-dim: #6a7e9c;
+  --color-ink-ghost: #3a4e68;
+  --color-pitch: #060a14;
+  --color-deep: #0c1425;
+  --color-void: #111e35;
+  --color-rim: #1a2d46;
+  --color-rim-2: #254060;
+  --color-lime: #bef264;
+  --color-lime-dim: #8ab832;
+  --color-coral: #f87171;
+  --color-amber: #fbbf24;
+  --color-sky: #38bdf8;
+
+  --color-opt-a-bg: #17083f;
+  --color-opt-a-border: #7c3aed;
+  --color-opt-a-text: #c4b5fd;
+  --color-opt-b-bg: #052520;
+  --color-opt-b-border: #0d9488;
+  --color-opt-b-text: #99f6e4;
+  --color-opt-c-bg: #2c1004;
+  --color-opt-c-border: #ea580c;
+  --color-opt-c-text: #fed7aa;
+  --color-opt-d-bg: #071b3d;
+  --color-opt-d-border: #2563eb;
+  --color-opt-d-text: #bfdbfe;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; padding: 0; }
+
+body {
+  background-color: #060a14;
+  color: #edf0f7;
+  font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.dot-grid {
+  background-image: radial-gradient(circle, rgba(37, 64, 96, 0.5) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* ── Animations ──────────────────────────────────────────────── */
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scale-pop {
+  0%   { transform: scale(1); }
+  45%  { transform: scale(1.07); }
+  100% { transform: scale(1); }
+}
+
+@keyframes correct-glow {
+  0%   { box-shadow: 0 0 0 0 rgba(190, 242, 100, 0.5); }
+  100% { box-shadow: 0 0 0 18px rgba(190, 242, 100, 0); }
+}
+
+@keyframes wrong-shake {
+  0%,100% { transform: translateX(0); }
+  20%     { transform: translateX(-6px); }
+  40%     { transform: translateX(6px); }
+  60%     { transform: translateX(-4px); }
+  80%     { transform: translateX(4px); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes bar-reveal {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@keyframes medal-drop {
+  0%   { opacity: 0; transform: translateY(-30px) scale(0.8); }
+  60%  { transform: translateY(4px) scale(1.05); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes timer-urgent {
+  0%,100% { color: #f87171; }
+  50%     { color: #fbbf24; }
+}
+
+.anim-fade-up        { animation: fade-up 0.45s cubic-bezier(0.22,1,0.36,1) both; }
+.anim-fade-in        { animation: fade-in 0.35s ease both; }
+.anim-scale-pop      { animation: scale-pop 0.28s ease both; }
+.anim-slide-up       { animation: slide-up 0.5s cubic-bezier(0.22,1,0.36,1) both; }
+.anim-slide-in-left  { animation: slide-in-left 0.4s ease both; }
+.anim-correct-glow   { animation: correct-glow 0.6s ease-out both; }
+.anim-wrong-shake    { animation: wrong-shake 0.4s ease both; }
+.anim-medal-drop     { animation: medal-drop 0.55s cubic-bezier(0.34,1.56,0.64,1) both; }
+.anim-timer-urgent   { animation: timer-urgent 1s ease-in-out infinite; }
+
+/* ── Answer option cards ─────────────────────────────────────── */
+
+.opt-card {
+  transition: transform 0.15s ease, filter 0.15s ease, opacity 0.2s ease;
+}
+.opt-card[data-opt="0"] { background-color: #17083f; border-color: #7c3aed; color: #c4b5fd; }
+.opt-card[data-opt="1"] { background-color: #052520; border-color: #0d9488; color: #99f6e4; }
+.opt-card[data-opt="2"] { background-color: #2c1004; border-color: #ea580c; color: #fed7aa; }
+.opt-card[data-opt="3"] { background-color: #071b3d; border-color: #2563eb; color: #bfdbfe; }
+
+.opt-card[data-opt="0"] .opt-badge { background-color: #7c3aed; }
+.opt-card[data-opt="1"] .opt-badge { background-color: #0d9488; }
+.opt-card[data-opt="2"] .opt-badge { background-color: #ea580c; }
+.opt-card[data-opt="3"] .opt-badge { background-color: #2563eb; }
+
+.opt-card.opt-idle    { cursor: pointer; }
+.opt-card.opt-idle:hover { transform: scale(1.015); filter: brightness(1.12); }
+
+.opt-card.opt-correct { background-color: rgba(190,242,100,0.10) !important; border-color: #bef264 !important; color: #bef264 !important; }
+.opt-card.opt-wrong   { background-color: rgba(248,113,113,0.10) !important; border-color: #f87171 !important; color: #f87171 !important; }
+.opt-card.opt-dim     { opacity: 0.35; pointer-events: none; }
+
+/* Bar chart for results */
+.result-bar {
+  transform-origin: left center;
+  animation: bar-reveal 0.7s cubic-bezier(0.22,1,0.36,1) both;
+}
+.result-bar[data-opt="0"] { background-color: #7c3aed; }
+.result-bar[data-opt="1"] { background-color: #0d9488; }
+.result-bar[data-opt="2"] { background-color: #ea580c; }
+.result-bar[data-opt="3"] { background-color: #2563eb; }
+.result-bar.bar-correct   { background-color: #bef264 !important; }

@@ -1,0 +1,111 @@
+<div class="min-h-screen bg-pitch dot-grid flex flex-col">
+
+  <!-- Header -->
+  <header class="px-6 py-5 border-b border-rim anim-fade-in">
+    <p class="font-mono text-xs text-ink-ghost tracking-widest uppercase mb-1">Final Results</p>
+    <h1 class="font-display text-2xl text-ink">{{ activityTitle() }}</h1>
+  </header>
+
+  <main class="flex-1 flex flex-col max-w-xl w-full mx-auto px-6 py-8 gap-4">
+
+    <!-- Podium (top 3) -->
+    @if (ranked().length >= 3) {
+      <div class="flex items-end justify-center gap-3 mb-4 anim-fade-up" style="animation-delay:40ms">
+
+        <!-- 2nd place -->
+        <div class="flex flex-col items-center gap-2">
+          <span class="text-2xl anim-medal-drop" style="animation-delay:200ms">🥈</span>
+          <div class="w-20 bg-void border border-rim rounded-t-xl flex flex-col items-center justify-end pt-3 pb-2" style="height:80px">
+            <p class="font-mono text-xs text-ink-ghost">{{ ranked()[1].score }}</p>
+            <p class="text-xs text-ink font-sans mt-0.5 truncate max-w-[72px] text-center">{{ ranked()[1].name }}</p>
+          </div>
+        </div>
+
+        <!-- 1st place -->
+        <div class="flex flex-col items-center gap-2">
+          <span class="text-3xl anim-medal-drop" style="animation-delay:80ms">🥇</span>
+          <div class="w-24 bg-amber/10 border border-amber/40 rounded-t-xl flex flex-col items-center justify-end pt-3 pb-2" style="height:110px">
+            <p class="font-mono text-sm text-amber font-bold">{{ ranked()[0].score }}</p>
+            <p class="text-sm text-ink font-sans mt-0.5 truncate max-w-[88px] text-center font-bold">{{ ranked()[0].name }}</p>
+          </div>
+        </div>
+
+        <!-- 3rd place -->
+        <div class="flex flex-col items-center gap-2">
+          <span class="text-2xl anim-medal-drop" style="animation-delay:320ms">🥉</span>
+          <div class="w-20 bg-void border border-rim rounded-t-xl flex flex-col items-center justify-end pt-3 pb-2" style="height:60px">
+            <p class="font-mono text-xs text-ink-ghost">{{ ranked()[2].score }}</p>
+            <p class="text-xs text-ink font-sans mt-0.5 truncate max-w-[72px] text-center">{{ ranked()[2].name }}</p>
+          </div>
+        </div>
+
+      </div>
+    }
+
+    <!-- Full ranking -->
+    <div class="space-y-2">
+      @for (player of ranked(); track player.id; let i = $index) {
+        <div
+          class="flex items-center gap-4 rounded-2xl border px-5 py-3 anim-slide-in-left"
+          [class.border-amber]="i === 0"
+          [class.bg-amber]="i === 0"
+          [class.border-rim]="i !== 0"
+          [class.bg-void]="i !== 0"
+          [style.animation-delay]="getDelay(i)"
+        >
+          <!-- Rank -->
+          <div class="w-8 text-center">
+            @if (getMedal(i)) {
+              <span class="text-xl">{{ getMedal(i) }}</span>
+            } @else {
+              <span class="font-mono text-sm text-ink-ghost">{{ i + 1 }}</span>
+            }
+          </div>
+
+          <!-- Name -->
+          <span
+            class="flex-1 font-sans text-base"
+            [class.text-pitch]="i === 0"
+            [class.font-bold]="i === 0"
+            [class.text-ink]="i !== 0"
+          >{{ player.name }}</span>
+
+          <!-- Score -->
+          <div class="text-right">
+            <span
+              class="font-mono text-base font-bold"
+              [class.text-pitch]="i === 0"
+              [class.text-amber]="i !== 0"
+            >{{ player.score }}</span>
+            <span
+              class="font-mono text-xs ml-1"
+              [class.text-pitch]="i === 0"
+              [class.opacity-70]="i === 0"
+              [class.text-ink-ghost]="i !== 0"
+            >pts</span>
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (ranked().length === 0) {
+      <div class="flex-1 flex items-center justify-center">
+        <p class="text-ink-ghost font-mono text-sm">No players to show.</p>
+      </div>
+    }
+
+    <!-- Play again -->
+    <div class="flex justify-center pt-6 anim-fade-up" style="animation-delay:600ms">
+      <button
+        (click)="playAgain()"
+        class="flex items-center gap-3 px-8 py-3.5 rounded-xl font-mono text-sm font-bold tracking-wide transition-all duration-200 border border-rim hover:border-rim-2 text-ink-dim hover:text-ink"
+      >
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75S21.75 6.615 21.75 12 17.385 21.75 12 21.75 2.25 17.385 2.25 12zm9.75-4.5v4.5m0 0v4.5m0-4.5h4.5m-4.5 0H7.5" />
+        </svg>
+        Play Again
+      </button>
+    </div>
+
+  </main>
+</div>
