@@ -8,7 +8,7 @@
       <!-- Progress bar -->
       <div class="flex-1">
         <div class="flex items-center justify-between mb-1.5">
-          <span class="font-mono text-xs text-ink-ghost tracking-widest uppercase">Question</span>
+          <span class="font-mono text-xs text-ink-ghost tracking-widest uppercase">Pregunta</span>
           <span class="font-mono text-xs text-ink-ghost">{{ questionNumber() }} / {{ totalQuestions() }}</span>
         </div>
         <div class="h-1.5 bg-void rounded-full overflow-hidden">
@@ -102,7 +102,7 @@
           [class.text-white]="!isCorrect()"
         >
           <span class="text-lg">{{ isCorrect() ? '✓' : '✗' }}</span>
-          <span>{{ isCorrect() ? 'Correct! Calculating score…' : 'Not quite — showing results…' }}</span>
+          <span>{{ isCorrect() ? '¡Correcto! Calculando puntuación…' : 'Fallaste — mostrando resultados…' }}</span>
         </div>
       }
 
@@ -110,7 +110,7 @@
 
   } @else {
     <div class="flex-1 flex items-center justify-center">
-      <p class="text-ink-ghost font-mono text-sm">No active question.</p>
+      <p class="text-ink-ghost font-mono text-sm">No hay pregunta activa.</p>
     </div>
   }
 

@@ -3,7 +3,7 @@
   <!-- Header -->
   <header class="px-6 py-5 border-b border-rim flex items-center justify-between anim-fade-in">
     <span class="font-mono text-xs text-ink-ghost tracking-widest uppercase">
-      Question {{ questionNumber() }} Results
+      Resultados — Pregunta {{ questionNumber() }}
     </span>
     <span class="font-mono text-xs text-ink-ghost">
       {{ gameService.activity()?.title }}
@@ -16,7 +16,7 @@
       <!-- Correct answer callout -->
       @if (question(); as q) {
         <div class="anim-fade-up" style="animation-delay:40ms">
-          <p class="font-mono text-xs text-ink-ghost tracking-widest uppercase mb-3">Correct Answer</p>
+          <p class="font-mono text-xs text-ink-ghost tracking-widest uppercase mb-3">Respuesta correcta</p>
           <div class="flex items-center gap-4 bg-lime/8 border border-lime/30 rounded-2xl px-5 py-4">
             <div class="w-10 h-10 rounded-xl bg-lime flex items-center justify-center font-mono font-bold text-pitch text-sm shrink-0">
               {{ optionLabels[r.correctIndex] }}
@@ -24,7 +24,7 @@
             <div>
               <p class="font-display text-xl text-lime">{{ q.options[r.correctIndex] }}</p>
               <p class="font-mono text-xs text-ink-ghost mt-0.5">
-                {{ r.distribution[r.correctIndex].count }} of {{ gameService.players().length + 1 }} answered correctly
+                {{ r.distribution[r.correctIndex].count }} de {{ gameService.players().length + 1 }} respondieron correctamente
               </p>
             </div>
           </div>
@@ -33,7 +33,7 @@
 
       <!-- Answer distribution -->
       <div class="anim-fade-up" style="animation-delay:120ms">
-        <p class="font-mono text-xs text-ink-ghost tracking-widest uppercase mb-4">Answer Distribution</p>
+        <p class="font-mono text-xs text-ink-ghost tracking-widest uppercase mb-4">Distribución de respuestas</p>
         <div class="space-y-3">
           @for (bar of r.distribution; track bar.optionIndex) {
             <div class="flex items-center gap-3">
@@ -59,7 +59,7 @@
                   [class.text-pitch]="bar.percentage > 20"
                   [class.text-ink-dim]="bar.percentage <= 20"
                 >
-                  {{ bar.count }} @if (bar.count === 1) { player } @else { players }
+                  {{ bar.count }} @if (bar.count === 1) { jugador } @else { jugadores }
                 </span>
               </div>
 
@@ -76,7 +76,7 @@
       <!-- Mini leaderboard -->
       @if (top3().length > 0) {
         <div class="anim-fade-up" style="animation-delay:300ms">
-          <p class="font-mono text-xs text-ink-ghost tracking-widest uppercase mb-3">Top Scores</p>
+          <p class="font-mono text-xs text-ink-ghost tracking-widest uppercase mb-3">Mejores puntuaciones</p>
           <div class="space-y-2">
             @for (player of top3(); track player.id; let i = $index) {
               <div class="flex items-center gap-3 bg-void border border-rim rounded-xl px-4 py-2.5">
@@ -95,7 +95,7 @@
           (click)="next()"
           class="flex items-center gap-3 px-6 py-3.5 rounded-xl font-mono text-sm font-bold tracking-wide transition-all duration-200 bg-lime text-pitch hover:bg-lime-dim hover:shadow-[0_0_24px_rgba(190,242,100,0.3)]"
         >
-          {{ isLast() ? 'See Final Results' : 'Next Question' }}
+          {{ isLast() ? 'Ver resultados finales' : 'Siguiente pregunta' }}
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
           </svg>
@@ -105,7 +105,7 @@
     </main>
   } @else {
     <div class="flex-1 flex items-center justify-center">
-      <p class="text-ink-ghost font-mono text-sm">No results available.</p>
+      <p class="text-ink-ghost font-mono text-sm">No hay resultados disponibles.</p>
     </div>
   }
 

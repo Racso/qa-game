@@ -39,26 +39,26 @@ export const OPTION_LABELS = ['A', 'B', 'C', 'D'] as const;
 
 export const DEMO_ACTIVITY: Activity = {
   id: 'demo-1',
-  title: 'General Knowledge',
+  title: 'Conocimiento General',
   questions: [
     {
       id: 1,
-      text: 'What is the capital of France?',
-      options: ['Berlin', 'Madrid', 'Paris', 'Rome'],
+      text: '¿Cuál es la capital de Francia?',
+      options: ['Berlín', 'Madrid', 'París', 'Roma'],
       correctIndex: 2,
       timeLimitSeconds: 20,
     },
     {
       id: 2,
-      text: 'How many sides does a hexagon have?',
+      text: '¿Cuántos lados tiene un hexágono?',
       options: ['5', '6', '7', '8'],
       correctIndex: 1,
       timeLimitSeconds: 15,
     },
     {
       id: 3,
-      text: 'Which planet is closest to the Sun?',
-      options: ['Venus', 'Earth', 'Mars', 'Mercury'],
+      text: '¿Qué planeta está más cerca del Sol?',
+      options: ['Venus', 'Tierra', 'Marte', 'Mercurio'],
       correctIndex: 3,
       timeLimitSeconds: 20,
     },
