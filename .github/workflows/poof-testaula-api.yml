@@ -1,0 +1,39 @@
+name: Poof! Deploy
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "server/**"
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build and push image
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          IMAGE=ghcr.io/racso/testaula-api:${{ github.sha }}
+          docker build -t $IMAGE -f server/Dockerfile server
+          docker push $IMAGE
+          echo "IMAGE=$IMAGE" >> $GITHUB_ENV
+
+      - name: Deploy via Poof!
+        run: |
+          curl -fsSL -X POST "${{ secrets.POOF_URL }}/projects/testaula-api/deploy" \
+            -H "Authorization: Bearer ${{ secrets.POOF_TOKEN_TESTAULA_API }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"image\": \"${{ env.IMAGE }}\"}"
+
+      - name: Clean up old images
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: testaula-api
+          package-type: container
+          min-versions-to-keep: 3
+          delete-only-untagged-versions: false
