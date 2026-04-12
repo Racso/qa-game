@@ -1,4 +1,4 @@
-name: Poof! Deploy
+name: Poof! deploy
 
 on:
   push:
@@ -10,6 +10,7 @@ permissions:
 
 jobs:
   deploy:
+    if: vars.POOF_DISABLE != '1'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
